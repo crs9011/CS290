@@ -1,6 +1,6 @@
 table, th, td, tfoot {border: 1px solid black;}
 
-tr:nth-child(even) {background-color: #f2f2f2}
+tr:nth-child(even) {background-color: #87CEFA}
 
 td.italics {font-style: italic;}
 td.red {color: red;}
@@ -12,15 +12,15 @@ div.outer-content
 	background-color: pink;
 	width: 75%;
 	padding: 5px;
-	float: center;
 	margin: 20px;
+	text-align: center;
 }
 
 div.inner-content
 {
-	background-color: blue;
+	display: inline-block;
+	background-color: #87CEFA;
 	width: 75%;
 	padding: 5px;
-	float: center;
 	margin: 20px;
 }
