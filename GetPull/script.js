@@ -11,24 +11,6 @@ app.get('/',function(req,res){
   res.render('home')
 });
 
-/*
-app.get('/get-loopback',function(req,res){
-  var qParams = "";
-  
-  for (var p in req.query){
-    qParams += "the variable " + p + " contains the value " + req.query[p] + ", ";
-  }
-  
-  qParams = qParams.substring(0,qParams.lastIndexOf(','));
-  qParams += '.';
-  qParams = "T" + qParams.slice(1);
-  
-  var context = {};
-  context.dataList = qParams;
-  res.render('get-loopback', context);
-});
-*/
-
 app.use(function(req,res){
   res.status(404);
   res.render('404');
