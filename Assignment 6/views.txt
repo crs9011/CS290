@@ -1,0 +1,12 @@
+D:.
+│   script.js
+│   package.json
+│                           
+└───views
+    │   404.handlebars
+    │   500.handlebars
+    │   home.handlebars
+    │   get-loopback.handlebars
+    │   
+    └───layouts
+            main.handlebars

@@ -1,0 +1,66 @@
+<html>
+	<head>
+		<title> Ajax Interactions </title>
+		<script src = "script.js"></script>
+	</head>
+	
+	<body>
+		<form>
+			<fieldset>
+			
+				<legend> Open Weather Map GET</legend>
+				<label for = "openWeatherMap"> </label>
+				
+				<p> Input City and State Name: </p>
+				<input type = "text" name = "cityName" id = "cityName" value = "Corvallis"> <br>
+				<input type = "text" name = "stateName" id = "stateName" value = "Oregon"> 
+				<input type = "submit" id = "nameSubmit"> <br>
+				
+				<p> Or input Zip Code: </p>
+				<input type = "text" name = "zipCode" id = "zipCode" value = "97330">
+				<input type = "submit" id = "zipSubmit">
+				
+			</fieldset>
+		</form>
+		
+		<div>
+			<h2> Result from Open Weather Map GET </h2>
+			<ul>
+				<li> <span> URL: </span> <span id = "url"> </span> </li>
+				<li> <span> Location: </span> <span id = "location"> </span> </li>
+				<li> <span> Description: </span> <span id = "description"> </span> </li>
+				<li> <span> Temperature: </span> <span id = "temperature"> </span> </li>
+				<li> <span> Humidity: </span> <span id = "humidity"> </span> </li>
+			</ul>
+		</div>
+		
+		<br>
+		
+		<form>
+			<fieldset>
+				<legend> httpbin POST </legend>
+				<label for = "postForm"> </label>
+				
+				<p> Input City and State Name: </p>
+				<input type = "text" name = "cityName2" id = "cityName2" value = "Corvallis"> <br>
+				<input type = "text" name = "stateName2" id = "stateName2" value = "Oregon"> 
+				<input type = "submit" id = "nameSubmit2"> <br>
+				
+				<p> Or input Zip Code: </p>
+				<input type = "text" name = "zipCode2" id = "zipCode2" value = "97330">
+				<input type = "submit" id = "zipSubmit2">
+				
+			</fieldset>
+		</form>
+		
+		<div>
+			<h2> Result from httpbin POST </h2>
+			<ul>
+				<li> <span> Location: </span> <span id = "location2"> </span> </li>
+				<li> <span> Description: </span> <span id = "description2"> </span> </li>
+				<li> <span> Temperature: </span> <span id = "temperature2"> </span> </li>
+				<li> <span> Humidity: </span> <span id = "humidity2"> </span> </li>
+			</ul>
+		</div>
+	</body>
+</html>
