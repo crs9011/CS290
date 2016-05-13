@@ -5,12 +5,13 @@ var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
-app.set('port', 3000);
+app.set('port', 3001);
 
 app.get('/',function(req,res){
   res.render('home')
 });
 
+/*
 app.get('/get-loopback',function(req,res){
   var qParams = "";
   
@@ -26,6 +27,7 @@ app.get('/get-loopback',function(req,res){
   context.dataList = qParams;
   res.render('get-loopback', context);
 });
+*/
 
 app.use(function(req,res){
   res.status(404);
