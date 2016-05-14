@@ -12,17 +12,7 @@ app.set('view engine', 'handlebars');
 app.set('port', 3001);
 
 app.get('/',function(req,res){
-	var qParams = [];
-	
-	for (var p in req.query)
-	{
-		qParams.push({'name':p,'value':req.query[p]})
-	}
-	
-	var context = {};
-	context.dataList = qParams;
-	
-	res.render('home', context);
+	res.render('home');
 });
 
 app.get('/GetRequest', function(req, res){
@@ -36,14 +26,14 @@ app.get('/GetRequest', function(req, res){
 	var context = {};
 	context.dataList = getParams;
 	res.render('get', context);
-}
+});
 
-app.post('/PostRequest', function(req, res{
+app.post('/PostRequest', function(req, res){
 	var postParams = [];
 	
 	for (var p in req.body)
 	{
-		postParams.push({'name':p,'value':req.body[p]}})
+		postParams.push({'name':p,'value':req.body[p]})
 	}
 	
 	console.log(postParams);
@@ -52,7 +42,7 @@ app.post('/PostRequest', function(req, res{
 	var context = {}
 	context.dataList = postParams;
 	res.render('post', context);
-}
+});
 
 app.use(function(req,res){
 	res.status(404);
