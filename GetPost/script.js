@@ -14,7 +14,7 @@ app.set('port', 3001);
 app.get('/',function(req,res){
 	var qParams = [];
 	
-	for (var p in req.query
+	for (var p in req.query)
 	{
 		qParams.push({'name':p,'value':req.query[p]})
 	}
