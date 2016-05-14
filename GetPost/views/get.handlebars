@@ -1,6 +1,7 @@
 <h1> GET request received </h1>
-<ul>
+<dl>
 	{{#each context.dataList}}
-		<li>{{this.name}} contains the value: {{this.value}} </li>
+		<dt>{{this.name}} contains: </dt>
+			<dd> {{this.value}} </dd>
 	{{/each}}
-</ul>
+</dl>

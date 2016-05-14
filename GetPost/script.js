@@ -39,7 +39,7 @@ app.post('/PostRequest', function(req, res){
 	console.log(postParams);
 	console.log(req.body);
 	
-	var context = {}
+	var context = {};
 	context.dataList = postParams;
 	res.render('post', context);
 });
