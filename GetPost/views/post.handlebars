@@ -1,6 +1,6 @@
 <h1> POST request received </h1>
 <ul>
-	{{#each param}}
+	{{#each context.dataList}}
 		<li>{{this.name}} contains the value: {{this.value}} </li>
 	{{/each}}
 </ul>
