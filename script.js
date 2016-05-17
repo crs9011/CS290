@@ -15,6 +15,35 @@ app.get('/',function(req,res){
 	res.render('home');
 });
 
+app.get('/GetRequest', function(req, res){
+	var getParams = [];
+	
+	for (var p in req.query)
+	{
+		getParams.push({'name':p,'value':req.query[p]})
+	}
+	
+	var context = {};
+	context.dataList = getParams;
+	res.render('get', context);
+});
+
+app.post('/PostRequest', function(req, res){
+	var postParams = [];
+	
+	for (var p in req.body)
+	{
+		postParams.push({'name':p,'value':req.body[p]})
+	}
+	
+	console.log(postParams);
+	console.log(req.body);
+	
+	var context = {};
+	context.dataList = postParams;
+	res.render('post', context);
+});
+
 app.use(function(req,res){
 	res.status(404);
 	res.render('404');
