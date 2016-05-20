@@ -1,0 +1,138 @@
+<h1> Spotify Web API How To Guide - API Documentation </h1>
+<h2> Endpoint References </h2>
+<h3> Below is a list of choice endpoint references, along with their descriptions, a link to their official documentation, and short code samples regarding their use. </h3>
+
+<h4> /v1/albums/{id} </h4>
+<dl>
+	<dt> Use: </dt>
+	<dd> - This endpoint uses a GET request to return a specified Album's Information in JSON format. </dd>
+	<dt> Official Documentation: </dt>
+	<dd> <a href = "https://developer.spotify.com/web-api/get-album/"> - found here </a> </dd>
+	<dt> View a Sample of Example Return Information: </dt>
+	<dd> -<button id = "getAlbumExample"> View Example </button> <span id = "albumExample"> </span> </dd>
+	<dt> View Code from Above Example: </dt>
+	<dd> <a href = "/API-doc/endpoint-reference/albums"> - found here </a> </dd>
+</dl>
+
+<h4> /v1/artists/{id} </h4>
+<dl>
+	<dt> Use: </dt>
+	<dd> - This endpoint uses a GET request to return a specified Artist's Information in JSON format. </dd>
+	<dt> Official Documentation: </dt>
+	<dd> <a href = "https://developer.spotify.com/web-api/get-artist/"> - found here </a> </dd>
+	<dt> View a Sample of Example Return Information: </dt>
+	<dd> -<button id = "getArtistExample"> View Example </button> <span id = "artistExample"> </span> </dd>
+	<dt> View Code from Above Example: </dt>
+	<dd> <a href = "/API-doc/endpoint-reference/artists"> - found here </a> </dd>
+</dl>
+
+<h4> /v1/tracks/{id} </h4>
+<dl>
+	<dt> Use: </dt>
+	<dd> - This endpoint uses a GET request to return a specified Tracks's Information in JSON format. </dd>
+	<dt> Official Documentation: </dt>
+	<dd> <a href = "https://developer.spotify.com/web-api/get-track/"> - found here </a> </dd>
+	<dt> View a Sample of Example Return Information: </dt>
+	<dd> -<button id = "getTrackExample"> View Example </button> <span id = "trackExample"> </span> </dd>
+	<dt> View Code from Above Example: </dt>
+	<dd> <a href = "/API-doc/endpoint-reference/tracks"> - found here </a> </dd>
+</dl>
+<hr>
+<a href = "http://localhost:8888/API-doc"> Back to API Documentation </a>
+
+<script> 
+	document.addEventListener('DOMContentLoaded', bindButtons);
+
+	function bindButtons()
+	{
+		document.getElementById('getAlbumExample').addEventListener('click', function(event)
+		{
+			var req = new XMLHttpRequest();
+			var payload = {url:null};
+			var AlbumID = "0sNOF9WDwhWunNAHPD3Baj"
+			payload.url = "https://api.spotify.com/v1/albums/" + AlbumID;
+			
+			req.open('GET', payload.url, false);
+			req.addEventListener('load',function()
+			{
+				if(req.status >= 200 && req.status < 400)
+				{
+					var response = JSON.parse(req.responseText);
+					console.log(response);
+					
+					var text = "The album " + response.name + ", by " + response.artists[0].name + ", was released in " + response.release_date;
+					
+					document.getElementById('albumExample').textContent = text;
+				}
+				
+				else
+				{
+					console.log("Error in network request: " + request.statusText);
+				}
+			});
+			
+			req.send(null);
+			event.preventDefault();
+		});
+		
+		document.getElementById('getArtistExample').addEventListener('click', function(event)
+		{
+			var req = new XMLHttpRequest();
+			var payload = {url:null};
+			var ID = "0OdUWJ0sBjDrqHygGUXeCF";
+			payload.url = "https://api.spotify.com/v1/artists/" + ID;
+			
+			req.open('GET', payload.url, false);
+			req.addEventListener('load',function()
+			{
+				if(req.status >= 200 && req.status < 400)
+				{
+					var response = JSON.parse(req.responseText);
+					console.log(response);
+					
+					var text = "The band " + response.name + " has " + response.followers.total + " followers on Spotify.";
+					
+					document.getElementById('artistExample').textContent = text;
+				}
+				
+				else
+				{
+					console.log("Error in network request: " + request.statusText);
+				}
+			});
+			
+			req.send(null);
+			event.preventDefault();
+		});
+		
+		document.getElementById('getTrackExample').addEventListener('click', function(event)
+		{
+			var req = new XMLHttpRequest();
+			var payload = {url:null};
+			var ID = "0eGsygTp906u18L0Oimnem";
+			payload.url = "https://api.spotify.com/v1/tracks/" + ID;
+			
+			req.open('GET', payload.url, false);
+			req.addEventListener('load',function()
+			{
+				if(req.status >= 200 && req.status < 400)
+				{
+					var response = JSON.parse(req.responseText);
+					console.log(response);
+					
+					var text = "The track " + response.name + " by " + response.artists.name + " on their album, " + response.album.name + ", is " + response.duration_ms + " ms long.";
+					
+					document.getElementById('trackExample').textContent = text;
+				}
+				
+				else
+				{
+					console.log("Error in network request: " + request.statusText);
+				}
+			});
+			
+			req.send(null);
+			event.preventDefault();
+		});
+	}
+</script>

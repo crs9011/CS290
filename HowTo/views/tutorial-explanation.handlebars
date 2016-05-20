@@ -1,0 +1,220 @@
+<h1> Spotify Web API How To Guide - API Documentation </h1>
+<h2> Supplemental Commentary on Tutorial </h2>
+<h3> Some Asides: </h3>
+
+<p> This Walkthrough will act as supplementary material to the Official Spotify Web API Tutorial found
+<a href = "https://developer.spotify.com/web-api/tutorial/"> here,</a> and as such, will not cover the
+process of registering an Application with Spotify, downloading the Spotify source code, or creating the various 
+client IDs. </p>
+
+<p> The first major step in creating an App that can fully utilize the Spotify Web API is implementing a system
+to allow users to login to Spotify. This is what the Spotify Web API Tutorial focuses on. Because the bulk of this API's functionality has to do with managing a user's
+personal library of music, there must be a way to validate the users who will be using the App. This is where Spotify's
+system of Authorization Code Flow comes in handy. (Like most every aspect of this API) Spotify's Authorization Code Flow is documented very thoroughly 
+<a href = "https://developer.spotify.com/web-api/authorization-guide/#authorization-code-flow"> here, </a> but I will give 
+a brief overview of the principle nevertheless. </p>
+
+<p> Essentially, when an App that uses Spotify's Web API wants to access a User's information (like their playlists, or
+personal library, or birthday, what-have-you), it needs permission from said User. So, the App requests this 
+permission in the form of prompting the User to login to Spotify through the App, causing Spotify to generate an access token 
+that the App controls. The App then uses this access token to access the User's account information through Spotify. </p>
+
+<p> The following will act as a supplemental walkthrough of the Spotify Authorization Code Flow. <p>
+
+<hr>
+
+<h3> 
+	The Spotify Authorization Code Flow (ACF) Code is stored in a JavaScript file entitled 'app.js', which is broken up into four major parts, 
+	in addition to the initial variable declarations. These initial declarations are listed below:
+</h3>
+
+<p>
+1......var express = require('express'); // Express web server framework<br>
+2......var request = require('request'); // "Request" library<br>
+3......var querystring = require('querystring');<br>
+4......var cookieParser = require('cookie-parser');<br>
+5......<br>
+6......var client_id = 'Client_ID'; // Your client id<br>
+7......var client_secret = 'Secret_ID'; // Your secret<br>
+8......var redirect_uri = 'Redirect_URI'; // Your redirect uri<br>
+9......<br>
+10....var stateKey = 'spotify_auth_state';<br>
+11....<br>
+12....var app = express();<br>
+13....<br>
+14....app.use(express.static(__dirname + '/public'))<br>
+15.............use(cookieParser());<br>
+</p>
+
+<p> 
+	This standard bit of variable declaration first includes the four libraries 'express', 'request', 'querystring',
+	and 'cookie-parser', meaning that methods from all of these libraries will be used in the code that follows.
+</p>
+<p>
+	After that,	the 'client_id' and 'client_secret' variables are defined and given values. The client_id is the publicly accessible
+	identifier for the App that you'll be building, whereas the client_secret is a private identifier to be passed to Spotify
+	for security purposes. 'redirect_uri' is the location of where to link to after Spotify is finished logging in the user, and
+	'stateKey' is a miscellaneous text variable which will be used later on in the process.
+</p>
+<p>
+	Finally, an instance of express is instantiated and assigned to the variable 'app'. This instance is then accessed, using the
+	html files found in the '/public' directory name.
+</p>
+
+<h3>
+	So, onto the bulk of the code. Firstly, the script declares the function below, which creates a random string given a certain length.
+</h3>
+	
+<p>
+1......var generateRandomString = function(length) {<br>
+2..............var text = '';<br>
+3..............var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';<br>
+4..............<br>
+5..............for (var i = 0; i < length; i++) {<br>
+6......................text += possible.charAt(Math.floor(Math.random() * possible.length));<br>
+7..............}<br>
+8..............return text;<br>
+9......};<br>
+</p>
+
+<p>
+	This function is pretty self-explanatory - it picks a character at random from a string of possible characters,
+	adding the newly chosen character onto the return string. It does this 'length' times to generate a random string of 
+	length 'length'. This function is used to ensure that the Application that made the request is the one getting the
+	response back, but that will be discussed in the following paragraphs.
+</p>
+
+<h3> Secondly, the script initiates the user login sequence using the code below. </h3>
+
+<p>
+1......app.get('/login', function(req, res) {<br>
+2..............<br>
+3..............var state = generateRandomString(16);<br>
+4..............res.cookie(stateKey, state);<br>
+5..............<br>
+6..............// your application requests authorization<br>
+7..............var scope = 'user-read-private user-read-email';<br>
+8..............res.redirect('https://accounts.spotify.com/authorize?' +<br>
+9..............querystring.stringify({<br>
+10....................response_type: 'code',<br>
+11....................client_id: client_id,<br>
+12....................scope: scope,<br>
+13....................redirect_uri: redirect_uri,<br>
+14....................state: state<br>
+15............}));<br>
+16....});<br>
+</p>
+
+<p>
+	A number of things happen here. Firstly, notice that this code will be called when the user navigates to the '/login'
+	page of the website. Upon doing so, the variable 'state' is created, in which is stored the return value of the above
+	generateRandomString function. This random string, along with the stateKey variable from earlier, is then stored in 
+	a cookie to be referenced later on.
+</p>
+<p>
+	Then, the variable 'scope' is created, into which information regarding what information the App will be requesting from
+	Spotify is put. The User is then redirected away from the App to the Spotify website via the res.redirect method. This
+	method is passed the string 'querystring', which contains the stringified contents of 'client_id', 'scope', 'redirect_uri', and 'state'.
+</p>
+
+<h3> 
+	Now, the User can safely login to the Spotify Website, where they will authorize the App to access their account information.
+	This brings us to the third (and most complex) portion of the ACF script - receiving the response from Spotify that contains said authorization. 
+	The relevant code is found below.
+</h3>
+
+<p>
+1......app.get('/callback', function(req, res) {<br>
+2..............<br>
+3..............// your application requests refresh and access tokens<br>
+4..............// after checking the state parameter<br>
+5..............<br>
+6..............var code = req.query.code || null;<br>
+7..............var state = req.query.state || null;<br>
+8..............var storedState = req.cookies ? req.cookies[stateKey] : null;<br>
+9..............<br>
+10............if (state === null || state !== storedState) {<br>
+11....................res.redirect('/#' +<br>
+12....................querystring.stringify({<br>
+13............................error: 'state..mismatch'<br>
+14....................}));<br>
+15............} else {<br>
+16....................res.clearCookie(stateKey);<br>
+17....................var authOptions = {<br>
+18............................url: 'https://accounts.spotify.com/api/token',<br>
+19............................form: {<br>
+20....................................code: code,<br>
+21....................................redirect_uri: redirect_uri,<br>
+22....................................grant_type: 'authorization_code'<br>
+23............................},<br>
+24............................headers: {<br>
+25....................................'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))<br>
+26............................},<br>
+27............................json: true<br>
+28....................};<br>
+29....................<br>
+30....................request.post(authOptions, function(error, response, body) {<br>
+31............................if (!error && response.statusCode === 200) {<br>
+32....................................<br>
+33....................................var access_token = body.access_token,<br>
+34............................................refresh_token = body.refresh_token;<br>
+35....................................<br>
+36....................................var options = {<br>
+37............................................url: 'https://api.spotify.com/v1/me',<br>
+38............................................headers: { 'Authorization': 'Bearer ' + access_token },<br>
+39............................................json: true<br>
+40....................................};<br>
+41....................................<br>
+42....................................// use the access token to access the Spotify Web API<br>
+43....................................request.get(options, function(error, response, body) {<br>
+44............................................console.log(body);<br>
+45....................................});<br>
+46....................................<br>
+47....................................// we can also pass the token to the browser to make requests from there<br>
+48....................................res.redirect('/#' +<br>
+49............................................querystring.stringify({<br>
+50....................................................access_token: access_token,<br>
+51....................................................refresh_token: refresh_token<br>
+52............................................}));<br>
+53............................} else {<br>
+54....................................res.redirect('/#' +<br>
+55............................................querystring.stringify({<br>
+56....................................................error: 'invalid_token'<br>
+57....................................}));<br>
+58............................}<br>
+59....................});<br>
+60............}<br>
+61....});<br>
+</p>
+
+<p> 
+	There is a whole lot of code here, but all in all, its contents aren't terribly hard to understand.
+</p>
+<p>
+	Firstly, notice that in the app.get() method in line 1, it's specified that this code should run when the User navigates to the
+	'/callback' page. This is where Spotify redirects the User after the login is done being authenticated, and can be changed in the
+	application information page on the official Spotify Website.
+</p>
+<p>
+	After a few variable declarations, another important thing happens - in line 10, the script checks the 'state' (received from Spotify in line 7) 
+	against the 'storedState' (retrieved from the local browser cookie in line 8). If these two values don't match, or if the 'state' recieved from Spotify
+	is Null, the web page redirects the User to an error page, halting the script then and there. If the two values match, the script continues.
+</p>
+<p>
+	Now, after clearing that local browser cookie in line 16, lines 17 - 28 are dedicated to setting up the options for an upcoming POST request. An important
+	note - here (line 25) is where the 'client_secret' is finally being passed to Spotify. Notice that, after being concatenated with the 'client_id', it is 
+	converted to base_64 to obfuscate both it and the client_id from being detected (I imagine). The security of a secret client ID is warranted now that we're 
+	handling User data.
+</p>
+<p>
+	The POST request that these options belong to is sent in line 30. If any error occurs during the process (forcing the statusCode to something other than 200),
+	the script will redirect the User to an error page, again halting the script. Otherwise, the final authentication step takes place. The App is given both an
+	'access_token' in line 33, and a 'refresh_token' in line 34, which are required to make requests to the Spotify API on behalf of the User. The 'access_token' 
+	will allow the App access into the Spotify Database, but only for a limited amount of time, which is denoted by the 'expires_in' (not shown here). Once the 
+	'access_token' expires, the App must request a new 'access_token' using the 'refresh_token', by posting another POST request to 'https://accounts.spotify.com/api/token'.
+</p>
+<h3>
+	This marks the end of the supplemental commentary on Spotify's Web API Tutorial.
+</h3>
+<hr>
+<a href = "/API-doc"> Back to API Documentation </a>

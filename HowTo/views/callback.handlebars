@@ -1,0 +1,387 @@
+<h1> Spotify Web API How To Guide - Example App </h1>
+<h2> This App lets you search for Artists, Tracks, or Albums in Spotify's Music Database. </h2>
+<p> Currently Logged In As: {{username}} </p>
+<p> Access Code: {{access_token}} </p>
+<hr>
+
+<form>
+	<fieldset>
+		<legend> Search Spotify </legend>
+		
+		Search for... <br>
+			<input type = "radio" name = "searchType" id = "searchTypeTrack" value = "Track" checked> Track <br>
+			<input type = "radio" name = "searchType" id = "searchTypeArtist" value = "Artist"> Artist <br>
+			<input type = "radio" name = "searchType" id = "searchTypeAlbum" value = "Album"> Album <br>
+			
+		<br> Enter Search Terms (separated by spaces) <br>
+			<input type = "text" id = "searchTerms"> <br> <br>
+			
+			<input type = "submit" id = "searchSubmit">
+	</fieldset>
+</form>
+
+<hr>
+
+<button id = "hide"> Hide Search Results </button>
+
+<hr>
+
+<dl>
+	<dt id = "trackName1"> </dt>
+		<dd id = "trackArtistName1"> </dd>
+		<dd id = "trackAlbumName1"> </dd>
+		<dd id = "trackPop1"> </dd>
+		<dd id = "trackID1"> </dd>
+	<dt id = "trackName2"> </dt>
+		<dd id = "trackArtistName2"> </dd>
+		<dd id = "trackAlbumName2"> </dd>
+		<dd id = "trackPop2"> </dd>
+		<dd id = "trackID2"> </dd>
+	<dt id = "trackName3"> </dt>
+		<dd id = "trackArtistName3"> </dd>
+		<dd id = "trackAlbumName3"> </dd>
+		<dd id = "trackPop3"> </dd>
+		<dd id = "trackID3"> </dd>
+	<dt id = "trackName4"> </dt>
+		<dd id = "trackArtistName4"> </dd>
+		<dd id = "trackAlbumName4"> </dd>
+		<dd id = "trackPop4"> </dd>
+		<dd id = "trackID4"> </dd>
+	<dt id = "trackName5"> </dt>
+		<dd id = "trackArtistName5"> </dd>
+		<dd id = "trackAlbumName5"> </dd>
+		<dd id = "trackPop5"> </dd>
+		<dd id = "trackID5"> </dd>
+</dl>
+
+<dl>
+	<dt id = "artistName1"> </dt>
+		<dd id = "artistPop1"> </dd>
+		<dd id = "artistID1"> </dd>
+	<dt id = "artistName2"> </dt>
+		<dd id = "artistPop2"> </dd>
+		<dd id = "artistID2"> </dd>
+	<dt id = "artistName3"> </dt>
+		<dd id = "artistPop3"> </dd>
+		<dd id = "artistID3"> </dd>
+	<dt id = "artistName4"> </dt>
+		<dd id = "artistPop4"> </dd>
+		<dd id = "artistID4"> </dd>
+	<dt id = "artistName5"> </dt>
+		<dd id = "artistPop5"> </dd>
+		<dd id = "artistID5"> </dd>
+</dl>
+
+<dl>
+	<dt id = "albumName1"> </dt>
+		<dd id = "albumID1"> </dd>
+	<dt id = "albumName2"> </dt>
+		<dd id = "albumID2"> </dd>
+	<dt id = "albumName3"> </dt>
+		<dd id = "albumID3"> </dd>
+	<dt id = "albumName4"> </dt>
+		<dd id = "albumID4"> </dd>
+	<dt id = "albumName5"> </dt>
+		<dd id = "albumID5"> </dd>
+</dl>
+
+<hr>
+
+<form>
+	<fieldset>
+		<legend> Save Track to Library of {{username}} </legend>
+			
+		<br> Enter Track ID: <br>
+			<input type = "text" id = "saveTerms"> <br>
+			
+		<br> Enter Access Code from Top of Screen: <br>
+			<input type = "text" id = "saveAccess"> <br> <br>
+			
+			<input type = "submit" id = "saveSubmit">
+	</fieldset>
+</form>
+
+<hr>
+
+<span id = "saveInfo"> </span>
+
+<hr>
+
+<form>
+	<fieldset>
+		<legend> Return Top 5 Tracks Saved by {{username}} </legend>
+
+		<br> Enter Access Code from Top of Screen: <br>
+			<input type = "text" id = "returnAccess"> <br> <br>
+			
+			<input type = "submit" id = "returnSubmit">
+	</fieldset>
+</form>
+
+<hr>
+
+<button id = "returnHide"> Hide Return Results </button>
+
+<hr>
+
+<dl>
+	<dt id = "strackName1"> </dt>
+		<dd id = "strackArtistName1"> </dd>
+		<dd id = "strackAlbumName1"> </dd>
+		<dd id = "strackPop1"> </dd>
+		<dd id = "strackID1"> </dd>
+	<dt id = "strackName2"> </dt>
+		<dd id = "strackArtistName2"> </dd>
+		<dd id = "strackAlbumName2"> </dd>
+		<dd id = "strackPop2"> </dd>
+		<dd id = "strackID2"> </dd>
+	<dt id = "strackName3"> </dt>
+		<dd id = "strackArtistName3"> </dd>
+		<dd id = "strackAlbumName3"> </dd>
+		<dd id = "strackPop3"> </dd>
+		<dd id = "strackID3"> </dd>
+	<dt id = "strackName4"> </dt>
+		<dd id = "strackArtistName4"> </dd>
+		<dd id = "strackAlbumName4"> </dd>
+		<dd id = "strackPop4"> </dd>
+		<dd id = "strackID4"> </dd>
+	<dt id = "strackName5"> </dt>
+		<dd id = "strackArtistName5"> </dd>
+		<dd id = "strackAlbumName5"> </dd>
+		<dd id = "strackPop5"> </dd>
+		<dd id = "strackID5"> </dd>
+</dl>
+
+<hr>
+
+<a href = "/app-breakdown"> To Breakdown and Explanation of App </a>
+
+<hr>
+
+<a href = "/"> Back to How To Guide Homepage </a>
+
+<script>
+	document.addEventListener('DOMContentLoaded', bindButtons);
+	
+	function hideInfo()
+	{
+		var idName = "";
+	
+		for (var i = 0; i < 5; i++)
+		{
+			idName = "albumName" + (i + 1);
+			document.getElementById(idName).textContent = "";
+			idName = "albumID" + (i + 1);
+			document.getElementById(idName).textContent = "";
+			idName = "artistName" + (i + 1);
+			document.getElementById(idName).textContent = "";
+			idName = "artistPop" + (i + 1);
+			document.getElementById(idName).textContent = "";
+			idName = "artistID" + (i + 1);
+			document.getElementById(idName).textContent = "";
+			idName = "trackName" + (i + 1);
+			document.getElementById(idName).textContent = "";
+			idName = "trackArtistName" + (i + 1);
+			document.getElementById(idName).textContent = "";
+			idName = "trackAlbumName" + (i + 1);
+			document.getElementById(idName).textContent = "";
+			idName = "trackPop" + (i + 1);
+			document.getElementById(idName).textContent = "";
+			idName = "trackID" + (i + 1);
+			document.getElementById(idName).textContent = "";
+		}
+	}
+	
+	function returnHideInfo()
+	{
+		var idName = "";
+	
+		for (var i = 0; i < 5; i++)
+		{
+			idName = "strackName" + (i + 1);
+			document.getElementById(idName).textContent = "";
+			idName = "strackArtistName" + (i + 1);
+			document.getElementById(idName).textContent = "";
+			idName = "strackAlbumName" + (i + 1);
+			document.getElementById(idName).textContent = "";
+			idName = "strackPop" + (i + 1);
+			document.getElementById(idName).textContent = "";
+			idName = "strackID" + (i + 1);
+			document.getElementById(idName).textContent = "";
+		}
+	}	
+
+	function displayInfo(response, searchType)
+	{
+		var text = "";
+		var idName = "";
+		
+		if (searchType == "track") 
+		{
+			for (var i = 0; i < 5; i++)
+			{
+				idName = "trackName" + (i + 1);
+				document.getElementById(idName).textContent = "Track Name: " + response.tracks.items[i].name;
+				idName = "trackArtistName" + (i + 1);
+				document.getElementById(idName).textContent = "Artist Name: " + response.tracks.items[i].artists[0].name;
+				idName = "trackAlbumName" + (i + 1);
+				document.getElementById(idName).textContent = "Album Name: " + response.tracks.items[i].album.name;
+				idName = "trackPop" + (i + 1);
+				document.getElementById(idName).textContent = "Track Popularity Rating: " + response.tracks.items[i].popularity;
+				idName = "trackID" + (i + 1);
+				document.getElementById(idName).textContent = "Track ID: " + response.tracks.items[i].id;
+			}
+		}
+		
+		else if (searchType == "album") 
+		{
+			for (var i = 0; i < 5; i++)
+			{
+				idName = "albumName" + (i + 1);
+				document.getElementById(idName).textContent = "Album Name: " + response.albums.items[i].name;
+				idName = "albumID" + (i + 1);
+				document.getElementById(idName).textContent = "Album ID: " + response.albums.items[i].id;
+			}
+		}
+		
+		else if (searchType == "artist") 
+		{
+			for (var i = 0; i < 5; i++)
+			{
+				idName = "artistName" + (i + 1);
+				document.getElementById(idName).textContent = "Artist Name: " + response.artists.items[i].name;
+				idName = "artistPop" + (i + 1);
+				document.getElementById(idName).textContent = "Artist Popularity Rating: " + response.artists.items[i].popularity;
+				idName = "artistID" + (i + 1);
+				document.getElementById(idName).textContent = "Artist ID: " + response.artists.items[i].id;
+			}
+		}
+	}
+	
+	function returnDisplayInfo(response)
+	{
+		var text = "";
+		var idName = "";
+		
+		for (var i = 0; i < 5; i++)
+		{
+			idName = "strackName" + (i + 1);
+			document.getElementById(idName).textContent = "Track Name: " + response.items[i].track.name;
+			idName = "strackArtistName" + (i + 1);
+			document.getElementById(idName).textContent = "Artist Name: " + response.items[i].track.artists[0].name;
+			idName = "strackAlbumName" + (i + 1);
+			document.getElementById(idName).textContent = "Album Name: " + response.items[i].track.album.name;
+			idName = "strackPop" + (i + 1);
+			document.getElementById(idName).textContent = "Track Popularity Rating: " + response.items[i].track.popularity;
+			idName = "strackID" + (i + 1);
+			document.getElementById(idName).textContent = "Track ID: " + response.items[i].track.id;
+		}
+	}
+	
+	function bindButtons()
+	{
+		document.getElementById('searchSubmit').addEventListener('click', function(event)
+		{
+			var req = new XMLHttpRequest();
+			var payload = {url:null};
+			
+			var searchType = {};
+			
+			if (document.getElementById('searchTypeTrack').checked) {
+				searchType = "track"}
+			else if (document.getElementById('searchTypeAlbum').checked) {
+				searchType = "album"}
+			else if (document.getElementById('searchTypeArtist').checked) {
+				searchType = "artist"}
+			
+			payload.url = "https://api.spotify.com/v1/search?q=" + document.getElementById('searchTerms').value + "&type=" + searchType;
+			
+			req.open("GET", payload.url, false);
+			req.addEventListener('load',function()
+			{
+				if(req.status >= 200 && req.status < 400)
+				{
+					var response = JSON.parse(req.responseText);
+					console.log(response);
+					
+					hideInfo();
+					displayInfo(response, searchType);
+				} 
+				
+				else 
+				{
+					console.log("Error in network request: " + request.statusText);
+				}
+			});
+			
+			req.send(null);
+			event.preventDefault();
+		});
+		
+		document.getElementById('hide').addEventListener('click', function(event)
+		{
+			hideInfo();
+		});
+		
+		document.getElementById('returnHide').addEventListener('click', function(event)
+		{
+			returnHideInfo();
+		});
+		
+		document.getElementById('saveSubmit').addEventListener('click', function(event)
+		{	
+			document.getElementById('saveInfo').textContent = "";
+			var req = new XMLHttpRequest();
+			var payload = {url:null};
+			
+			payload.url = "https://api.spotify.com/v1/me/tracks?access_token=" + document.getElementById('saveAccess').value + "&ids=" + document.getElementById('saveTerms').value;
+						
+			req.open("PUT", payload.url, false);
+			req.addEventListener('load',function()
+			{
+				if(req.status == 200)
+				{
+					document.getElementById('saveInfo').textContent = "Successfully Saved.";
+				} 
+				
+				else 
+				{
+					console.log("Error in network request: " + request.statusText);
+					document.getElementById('saveInfo').textContent = "Error - Did not Save.";
+				}
+			});
+			
+			req.send(null);
+			event.preventDefault();
+		});
+		
+		document.getElementById('returnSubmit').addEventListener('click', function(event)
+		{
+			var req = new XMLHttpRequest();
+			var payload = {url:null};
+			
+			payload.url = "https://api.spotify.com/v1/me/tracks?access_token=" + document.getElementById('returnAccess').value;
+			
+			req.open("GET", payload.url, false);
+			req.addEventListener('load',function()
+			{
+				if(req.status >= 200 && req.status < 400)
+				{
+					var response = JSON.parse(req.responseText);
+					console.log(response);
+					
+					returnHideInfo();
+					returnDisplayInfo(response);
+				} 
+				
+				else 
+				{
+					console.log("Error in network request: " + request.statusText);
+				}
+			});
+			
+			req.send(null);
+			event.preventDefault();
+		});
+	}
+</script>

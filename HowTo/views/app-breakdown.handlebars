@@ -1,0 +1,258 @@
+<h1> Spotify Web API How To Guide - Example App Breakdown </h1>
+<h3> 
+	This page will not go into detail on Spotify's Authorization Code Flow - 
+	For information regarding that process, click <a href = "/API-doc/tutorial-explanation"> here. </a> 
+</h3>
+
+<hr>
+
+<h3>
+	Aside from the ACF process, most of the code for this App exists in the view 'callback.handlebars', which is where
+	the ACF redirects to after authenticating the User's login information. This web page will go through this view
+	step by step, explaining when and where the Spotify Web API comes into play, starting with the App's Headings.
+</h3>
+
+<p>
+*****Code from callback.handlebars*****<br>
+1......&lt;h1&gt; Spotify Web API How To Guide - Example App &lt;/h1&gt;<br>
+2......&lt;h2&gt; This App lets you search for Artists, Tracks, or Albums in Spotify's Music Database.&lt;/h2&gt;<br>
+3......&lt;h3&gt; Currently Logged In As: {{username}} &lt;/h3&gt;<br>
+4......&lt;p&gt; Access Code: {{access_token}} &lt;/p&gt;<br>
+<br>
+*****Code from script.js*****<br>
+1......request.get(options, function(error, response, body) {<br>
+2......console.log(body);<br>
+3......<br>
+4......var context = {};<br>
+5......context = {<br>
+6..............username: body.id,<br>
+7..............access_token: access_token,<br>
+8..............refresh_token: refresh_token<br>
+9......}<br>
+10....<br>
+11....res.render('callback', context);<br>
+12....});<br>
+</p>
+
+<p>
+	This is the first spot where the Spotify Web API contributes information, in the form of the {{username}} and {{access_token}}. When
+	'callback' is rendered in the script.js file (the main JavaScript file for this web site), it is handed the object
+	'context', which contains a few choice pieces of information. Two of these pieces are the User's username and the clients
+	access_token, which are then both displayed in the resulting html document.
+</p>
+
+<h3> 
+	The next piece of code involving the Spotify API is the form where Users can search through Spotify's database.
+</h3>
+
+<p>
+*****Code from callback.handlebars (HTML)***** <br>
+1......&lt;form&gt;<br>
+2..............&lt;fieldset&gt;<br>
+3......................&lt;legend&gt; Search Spotify &lt;/legend&gt;<br>
+4......................<br>
+5......................Search for... &lt;br&gt;<br>
+6..............................&lt;input type = "radio" name = "searchType" id = "searchTypeTrack" value = "Track" checked&gt; Track &lt;br&gt;<br>
+7..............................&lt;input type = "radio" name = "searchType" id = "searchTypeArtist" value = "Artist"&gt; Artist &lt;br&gt;<br>
+8..............................&lt;input type = "radio" name = "searchType" id = "searchTypeAlbum" value = "Album"&gt; Album &lt;br&gt;<br>
+9..............................<br>
+10....................&lt;br&gt; Enter Search Terms (separated by spaces) &lt;br&gt;<br>
+11............................&lt;input type = "text" id = "searchTerms"&gt; &lt;br&gt; &lt;br&gt;<br>
+12............................<br>
+13............................&lt;input type = "submit" id = "searchSubmit"&gt;<br>
+14............&lt;/fieldset&gt;<br>
+15....&lt;/form&gt;<br>
+<br>
+*****Code from callback.handlebars (JavaScript)*****<br>
+1......function bindButtons()<br>
+2......{<br>
+3..............document.getElementById('searchSubmit').addEventListener('click', function(event)<br>
+4..............{<br>
+5......................var req = new XMLHttpRequest();<br>
+6......................var payload = {url:null};<br>
+7......................<br>
+8......................var searchType = {};<br>
+9......................<br>
+10....................if (document.getElementById('searchTypeTrack').checked) {<br>
+11............................searchType = "track"}<br>
+12....................else if (document.getElementById('searchTypeAlbum').checked) {<br>
+13............................searchType = "album"}<br>
+14....................else if (document.getElementById('searchTypeArtist').checked) {<br>
+15............................searchType = "artist"}<br>
+16....................<br>
+17....................payload.url = "https://api.spotify.com/v1/search?q=" + document.getElementById('searchTerms').value + "&type=" + searchType;<br>
+18....................<br>
+19....................req.open("GET", payload.url, false);<br>
+20....................req.addEventListener('load',function()<br>
+21....................{<br>
+22............................if(req.status >= 200 && req.status < 400)<br>
+23............................{<br>
+24....................................var response = JSON.parse(req.responseText);<br>
+25....................................console.log(response);<br>
+26....................................<br>
+27....................................hideInfo();<br>
+28....................................displayInfo(response, searchType);<br>
+29............................} <br>
+30............................<br>
+31............................else <br>
+32............................{<br>
+33....................................console.log("Error in network request: " + request.statusText);<br>
+34............................}<br>
+35....................});<br>
+36....................<br>
+37....................req.send(null);<br>
+38....................event.preventDefault();<br>
+39............});<br>
+40........}<br>
+</p>
+
+<p>
+	This form works by allowing Users to input whether they want to search for an Album, Artist, or Track (which they can select
+	via the radio input specified in lines 6-8 of the callback html code), and to enter whatever search terms they wish to
+	use in the text input in line 10. Upon pressing the Submit button, a function is called from the callback JavaScript 
+	portion of the code which puts together the GET request from the information provided.
+<p>
+
+<p>
+	The GET request is the same whether the User is searching for an Album, Artist, or Track - Either way, the GET request is sent to the same 
+	endpoint. Essentially, the Payload URL is made up of four things - the first half contains the Spotify URL and the Spotify API Search Endpoint, 
+	and the second half (the query string) contains all the search terms (separated by %20) and the type of search (whether its a Track, Album, or Artist
+	search). The Payload URL gets put together in line 17 of the JavaScript code. 
+</p>
+<p>
+	The request is then sent out to Spotify in line 19. If the request is good, the response will be logged in the console, and the top five selections from
+	the search will be displayed on the web page via the displayInfo function. Notice that the hideInfo function is called directly before this, to hide the results
+	of the previous search.
+</p>
+
+<h3>
+	The next form in the App allows User's to save Tracks to their personal library. Here is the code that makes that happen.
+</h3>
+
+*****Code from callback.handlebars (HTML)*****<br>
+1......&lt;form&gt; <br>
+2..............&lt;fieldset&gt;<br>
+3......................&lt;legend&gt; Save Track to Library of {{username}} &lt;/legend&gt;<br>
+4..............................<br>
+5......................&lt;br&gt; Enter Track ID: &lt;br&gt;<br>
+6..............................&lt;input type = "text" id = "saveTerms"&gt; &lt;br&gt;<br>
+7..............................<br>
+8......................&lt;br&gt; Enter Access Code from Top of Screen: &lt;br&gt;<br>
+9..............................&lt;input type = "text" id = "saveAccess"&gt; &lt;br&gt; &lt;br&gt;<br>
+10............................<br>
+11............................&lt;input type = "submit" id = "saveSubmit"&gt;<br>
+12............&lt;/fieldset&gt;<br>
+13....&lt;/form&gt;<br>
+<br>
+*****Code from callback.handlebars (JavaScript)*****<br>
+1......document.getElementById('saveSubmit').addEventListener('click', function(event)<br>
+2......{<br>
+3..............document.getElementById('saveInfo').textContent = "";<br>
+4..............var req = new XMLHttpRequest();<br>
+5..............var payload = {url:null};<br>
+6..............<br>
+7..............payload.url = "https://api.spotify.com/v1/me/tracks?access_token=" + document.getElementById('saveAccess').value + "&ids=" + document.getElementById('saveTerms').value;<br>
+8..............<br>
+9..............req.open("PUT", payload.url, false);<br>
+10............req.addEventListener('load',function()<br>
+11............{<br>
+12....................if(req.status == 200)<br>
+13....................{<br>
+14............................document.getElementById('saveInfo').textContent = "Successfully Saved.";<br>
+15....................} <br>
+16....................<br>
+17....................else <br>
+18....................{<br>
+19............................console.log("Error in network request: " + request.statusText);<br>
+20............................document.getElementById('saveInfo').textContent = "Error - Did not Save.";<br>
+21....................}<br>
+22............});<br>
+23............<br>
+24............req.send(null);<br>
+25............event.preventDefault();<br>
+26....});<br>
+
+<p> 
+	In contrast to the form above it, this form initiates a PUT request. The form contains two parameters for the User to fill out - 
+	The Track ID (which the User can get from the Search Spotify form), and the Access Code. The Access Code is required because, for 
+	the first time, we are accessing the Library of the User, and thus, need proper authentication. The Access Code was created during the
+	Authorization Code Flow process that went on as the User logged in to Spotify.
+</p>
+<p>
+	- ASIDE - 
+</p>
+<p>
+	Normally, the Access Code would operate entirely behind the scenes, invisible to the client, but due to the complexity of
+	Spotify's Authorization Code Flow, combined with the fact that this is a .handlebars file and not a .html file, I couldn't
+	figure out how to use the handlebars templating system to autopopulate this Access Code to everywhere that it needed to be.
+	But, when the Access Code is copied and pasted into a search box, it works. It certainly isn't pretty, but it works.
+</p>
+<p>
+	- END ASIDE -
+</p>
+<p>
+	Although this request is a PUT request, it still functions similarly to a GET request in that all the information can be passed
+	via the URL. The payload URL is built in line 7 of the JavaScript code, and is passed to Spotify in line 9. There is technically
+	no response to this request, because all it's attempting to do is save a song to the User's library, so the only way to know whether
+	or not it was successful is to look at the request status number. A number of 200 implies that the save was successful.
+</p>
+
+<h3>
+	Finally, the last form of the App allows the User to display five of their Saved Tracks.
+</h3>
+	
+*****Code from callback.handlebars (HTML)*****<br>
+1......&lt;form&gt;<br>
+2..............&lt;fieldset&gt;<br>
+3......................&lt;legend&gt; Return Top 5 Tracks Saved by {{username}} &lt;/legend&gt;<br>
+4......................<br>
+5......................&lt;br&gt; Enter Access Code from Top of Screen: &lt;br&gt;<br>
+6..............................&lt;input type = "text" id = "returnAccess"&gt; &lt;br&gt; &lt;br&gt;<br>
+7..............................<br>
+8..............................&lt;input type = "submit" id = "returnSubmit"&gt;<br>
+9..............&lt;/fieldset&gt;<br>
+10....&lt;/form&gt;<br>
+<br>
+*****Code from callback.handlebars (JavaScript)*****<br>
+1......document.getElementById('returnSubmit').addEventListener('click', function(event)<br>
+2......{<br>
+3..............var req = new XMLHttpRequest();<br>
+4..............var payload = {url:null};<br>
+5..............<br>
+6..............payload.url = "https://api.spotify.com/v1/me/tracks?access_token=" + document.getElementById('returnAccess').value;<br>
+7..............<br>
+8..............req.open("GET", payload.url, false);<br>
+9..............req.addEventListener('load',function()<br>
+10............{<br>
+11....................if(req.status >= 200 && req.status < 400)<br>
+12....................{<br>
+13............................var response = JSON.parse(req.responseText);<br>
+14............................console.log(response);<br>
+15............................<br>
+16............................returnHideInfo();<br>
+17............................returnDisplayInfo(response);<br>
+18....................} <br>
+19....................<br>
+20....................else <br>
+21....................{<br>
+22............................console.log("Error in network request: " + request.statusText);<br>
+23....................}<br>
+24............});<br>
+25............<br>
+26............req.send(null);<br>
+27............event.preventDefault();<br>
+28....});<br>
+
+<p>
+	Like the first form, this form initiates a GET request. However, unlike the first form, this one doesn't actually pass any information 
+	to Spotify other than the Access Code, which again is required because the App is attempting to access the User's Library. The Access Code
+	is given via the text input in line 6 of the HTML code. Once the Access Code is received, the payload URL is built, which is shown on line 6
+	of the JavaScript code. If the response from Spotify is good, the first five Tracks from the User's Library will be shown on the web page (or 
+	if there are less than five Tracks, as many will be displayed as there are).
+</p>
+
+<h3> This concludes the breakdown and explanation of the Spotify Web API Example App. </h3>
+
+<hr>
+
+<a href = "/"> Back to How To Guide Homepage </a>
