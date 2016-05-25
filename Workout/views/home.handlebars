@@ -1,0 +1,46 @@
+<h1> Workout Tracker </h1>
+
+{{results}}
+
+<table>
+	<tr>
+		<td> Name </td>
+		<td> Reps </td>
+		<td> Weight </td>
+		<td> Date </td>
+		<td> 0-kgs, 1-lbs </td>
+	</tr>
+
+</table>
+
+<form name = "resetTable" action = "/reset-table" method = "get">
+	<fieldset>
+		<legend> Reset Table </legend>
+		<input type = "submit" id = "resetSubmit">
+	</fieldset>
+</form>
+
+<form name = "selectTable" action = "/select" method = "get">
+	<fieldset>
+		<legend> Select Table </legend>
+		<input type = "submit" id = "selectSubmit">
+	</fieldset>
+</form>
+
+<form name = "updateTable" action = "/update" method = "get">
+	<fieldset>
+		<legend> Update Table </legend>
+		<input type = "submit" id = "updateSubmit">
+	</fieldset>
+</form>
+
+<form name = "insertTable" action = "/insert" method = "get">
+	<fieldset>
+		<legend> Insert Table </legend>
+		
+		Name of Exercise:<br>
+		<input type = "text" name = "name" id = "name" required> <br>
+		
+		<input type = "submit" id = "insertSubmit">
+	</fieldset>
+</form>
