@@ -29,8 +29,8 @@ app.get('/select',function(req,res,next){
 		}
 		
 		console.log(rows);
-		context.results = JSON.stringify(rows);
-		res.render('home', rows);
+		context.rows = rows;
+		res.render('home', context);
 	});
 });
 
