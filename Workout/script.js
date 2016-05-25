@@ -28,6 +28,7 @@ app.get('/select',function(req,res,next){
 			return;
 		}
 		
+		console.log(rows);
 		context.results = JSON.stringify(rows);
 		res.render('home', rows);
 	});
