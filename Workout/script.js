@@ -29,7 +29,7 @@ app.get('/select',function(req,res,next){
 		}
 		
 		context.results = JSON.stringify(rows);
-		res.render('home', context);
+		res.render('home', rows);
 	});
 });
 
