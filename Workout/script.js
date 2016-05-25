@@ -13,7 +13,7 @@ var pool = mysql.createPool({
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
-app.set('port', 8888);
+app.set('port', 3001);
 
 app.get('/',function(req,res,next){
 	res.render('home');
@@ -39,7 +39,7 @@ app.get('/reset-table',function(req,res,next){
 	pool.query("DROP TABLE IF EXISTS workouts", function(err){
 		var createString = "CREATE TABLE workouts("+
 		"id INT PRIMARY KEY AUTO_INCREMENT,"+
-		"name VARCHAR(255) NOT NULL,";
+		"name VARCHAR(255) NOT NULL)";
 	
 		pool.query(createString, function(err){
 			context.results = "Table reset";
