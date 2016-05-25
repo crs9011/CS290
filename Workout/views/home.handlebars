@@ -10,7 +10,15 @@
 		<td> Date </td>
 		<td> 0-kgs, 1-lbs </td>
 	</tr>
-
+	{{#each row}}
+	<tr>
+		<td> {{name}} </td>
+		<td> {{reps}} </td>
+		<td> {{weight}} </td>
+		<td> {{date}} </td>
+		<td> {{lbs}} </td>
+	</tr>
+	{{/each}}
 </table>
 
 <form name = "resetTable" action = "/reset-table" method = "get">
@@ -40,6 +48,14 @@
 		
 		Name of Exercise:<br>
 		<input type = "text" name = "name" id = "name" required> <br>
+		Number of Reps:<br>
+		<input type = "number" name = "reps" id = "reps"> <br>
+		Amount of Weight:<br>
+		<input type = "number" name = "weight" id = "weight"> <br>
+		Date of Exercise:<br>
+		<input type = "date" name = "date" id = "date"> <br>
+		0 for kgs, 1 for lbs:<br>
+		<input type = "number" name = "lbs" id = "lbs" min = 0 max = 1> <br>
 		
 		<input type = "submit" id = "insertSubmit">
 	</fieldset>

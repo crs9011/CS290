@@ -39,7 +39,11 @@ app.get('/reset-table',function(req,res,next){
 	pool.query("DROP TABLE IF EXISTS workouts", function(err){
 		var createString = "CREATE TABLE workouts("+
 		"id INT PRIMARY KEY AUTO_INCREMENT,"+
-		"name VARCHAR(255) NOT NULL)";
+		"name VARCHAR(255) NOT NULL,"+
+		"reps INT,"+
+		"weight INT,"+
+		"date DATE,"+
+		"lbs BOOLEAN)";
 	
 		pool.query(createString, function(err){
 			context.results = "Table reset";
@@ -50,7 +54,9 @@ app.get('/reset-table',function(req,res,next){
 
 app.get('/insert',function(req,res,next){
 	var context = {};
-	pool.query("INSERT INTO workouts (`name`) VALUES (?)", [req.query.name], function(err, result){
+	pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `date`, `lbs`) VALUES (?, ?, ?, ?, ?)", 
+		[req.query.name, req.query.reps, req.query.weight, req.query.date, req.query.lbs], 
+		function(err, result){
 		
 		if(err){
 			next(err);
