@@ -42,46 +42,12 @@
 				<td id = "date{{id}}"> 	{{date}} </td>
 				<td id = "lbs{{id}}">		{{lbs}} </td>
 				<td id = "updateButton{{id}}"> </td>
-				<td id = "deleteButton{{id}}"> </td>
-				
-				<script>
-					var newButton = document.createElement("button");
-					newButton.textContent = "Update Row";
-					newButton.addEventListener('click', function(event)
-					{
-						console.log("update {{id}}");
-					});
-					
-					document.getElementById("updateButton{{id}}").appendChild(newButton);
-					
-					
-					var newButton = document.createElement("button");
-					newButton.textContent = "Delete Row";
-					newButton.addEventListener('click', function(event)
-					{
-						var req = new XMLHttpRequest();
-						var payload = {url:null};
-						payload.url = "/delete?id={{id}}";
-						
-						req.open("GET", payload.url, false);
-						req.addEventListener('load',function()
-						{
-							if(req.status >= 200 && req.status < 400)
-							{
-								window.location = "/";
-							} 
-							
-							else 
-							{
-								console.log("Error in network request: " + request.statusText);
-							}
-						});
-						
-						req.send(null);		
-					});
-					
-					document.getElementById("deleteButton{{id}}").appendChild(newButton);
-				</script>
+				<td id = "deleteButton{{id}}"> 
+					<form name = "deleteTable" action = "/delete" method = "get">
+						<input type = "number" name = "id" id = "id" style = "display:none" value = "{{id}}">
+						<input type = "submit" id = "deleteSubmit">
+					</form>
+				</td>
 			</tr>
 		{{/each}}
 	</table>
