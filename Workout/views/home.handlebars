@@ -49,14 +49,35 @@
 			{
 				console.log("update {{id}}");
 			});
+			
 			document.getElementById("updateButton{{id}}").appendChild(newButton);
+			
 			
 			var newButton = document.createElement("button");
 			newButton.textContent = "Delete Row";
 			newButton.addEventListener('click', function(event)
 			{
-				console.log("delete {{id}}");
+				var req = new XMLHttpRequest();
+				var payload = {url:null};
+				payload.url = "/delete?id={{id}}";
+				
+				req.open("GET", payload.url, false);
+				req.addEventListener('load',function()
+				{
+					if(req.status >= 200 && req.status < 400)
+					{
+						window.location = "/submit";
+					} 
+					
+					else 
+					{
+						console.log("Error in network request: " + request.statusText);
+					}
+				});
+				
+				req.send(null);		
 			});
+			
 			document.getElementById("deleteButton{{id}}").appendChild(newButton);
 		</script>
 	</tr>
@@ -68,19 +89,12 @@
 	<fieldset>
 		<legend> Reset Table </legend>
 		<input type = "submit" id = "resetSubmit">
-	</fieldset>
+	<fieldset>
 </form>
 
-<form name = "selectTable" action = "/select" method = "get">
-	<fieldset>
-		<legend> Select Table </legend>
+<form name = "submitTable" action = "/submit" method = "get">
+	</fieldset>
+		<legend> View Table </legend>
 		<input type = "submit" id = "selectSubmit">
-	</fieldset>
-</form>
-
-<form name = "updateTable" action = "/update" method = "get">
-	<fieldset>
-		<legend> Update Table </legend>
-		<input type = "submit" id = "updateSubmit">
 	</fieldset>
 </form>
