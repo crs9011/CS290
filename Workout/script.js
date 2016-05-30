@@ -51,7 +51,7 @@ app.get('/reset-table',function(req,res,next){
 
 app.get('/delete',function(req,res,next){
 	var context = {};
-	pool.query("DELETE FROM workouts WHERE id=?", function(err, result){
+	pool.query("DELETE FROM workouts ('id') VALUES (?)", [req.query.id], function(err, result){
 		
 		if (err){
 			next(err);
