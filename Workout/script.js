@@ -43,8 +43,8 @@ app.get('/reset-table',function(req,res,next){
 		"lbs BOOLEAN)";
 	
 		pool.query(createString, function(err){
-			context.results = "Table reset";
-			res.render('home',context);
+			console.log("Table reset");
+			res.redirect('/');
 		})
 	});
 });
@@ -58,8 +58,8 @@ app.get('/delete',function(req,res,next){
 			return;
 		}
 		
-		context.results = result;
-		res.render('home', context);
+		console.log(result);
+		res.redirect('/');
 	});
 });
 
@@ -74,8 +74,8 @@ app.get('/insert',function(req,res,next){
 			return;
 		}
 		
-		context.results = "Inserted id " + result.insertId;
-		res.render('home',context);
+		console.log("Inserted id " + result.insertId);
+		res.redirect('/');
 	});
 });
 
@@ -90,8 +90,8 @@ app.get('/update',function(req,res,next){
 			return;
 		}
 		
-		context.results = "Updated " + result.changedRows + " rows.";
-		res.render('home',context);
+		console.log("Updated " + result.changedRows + " rows.");
+		res.redirect('/');
 	});
 });
 

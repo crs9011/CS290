@@ -41,11 +41,21 @@
 				<td id = "weight{{id}}"> 	{{weight}} </td>
 				<td id = "date{{id}}"> 	{{date}} </td>
 				<td id = "lbs{{id}}">		{{lbs}} </td>
-				<td id = "updateButton{{id}}"> </td>
 				<td id = "deleteButton{{id}}"> 
-					<form name = "deleteTable" action = "/delete" method = "get">
+					<form name = "deleteTable{{id}}" action = "/delete" method = "get">
 						<input type = "number" name = "id" id = "id" style = "display:none" value = "{{id}}">
-						<input type = "submit" id = "deleteSubmit">
+						<input type = "submit" id = "deleteSubmit"> Delete Row </input>
+					</form>
+				</td>
+				<td id = "updateButton{{id}}"> 
+					<form name = "updateTable{{id}}" action = "/update" method = "get">
+						<input type = "text" name = "name" id = "name" required value = "{{name}}">
+						<input type = "number" name = "reps" id = "reps" value = "{{reps}}">
+						<input type = "number" name = "weight" id = "weight" value = "{{weight}}">
+						<input type = "date" name = "date" id = "date" value = "{{date}}">
+						<input type = "number" name = "lbs" id = "lbs" min = 0 max = 1 value = "{{lbs}}">
+						<input type = "number" name = "id" id = "id" style = "display:none" value = "{{id}}">
+						<input type = "submit" id = "updateSubmit"> Update Row </input>
 					</form>
 				</td>
 			</tr>
