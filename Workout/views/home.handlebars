@@ -60,7 +60,7 @@
 					newButton.addEventListener('click', function(event)
 					{
 						var req = new XMLHttpRequest();
-						var payload = {url:NULL};
+						var payload = {url:null};
 						payload.url = "/delete?id={{id}}";
 						
 						req.open("GET", payload.url, false);
