@@ -58,8 +58,7 @@
 			newButton.addEventListener('click', function(event)
 			{
 				var req = new XMLHttpRequest();
-				var payload = {url:null};
-				payload.url = "/delete?id={{id}}";
+				var payload = {url:"/delete?{{id}}"};
 				
 				req.open("GET", payload.url, false);
 				req.addEventListener('load',function()
@@ -92,9 +91,9 @@
 	</fieldset>
 </form>
 
-<form name = "submitTable" action = "/select" method = "get">
+<form name = "submitTable" action = "/" method = "get">
 	<fieldset>
-		<legend> View Table </legend>
+		<legend> Reload Table </legend>
 		<input type = "submit" id = "selectSubmit">
 	</fieldset>
 </form>

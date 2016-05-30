@@ -16,10 +16,6 @@ app.set('view engine', 'handlebars');
 app.set('port', 3001);
 
 app.get('/',function(req,res,next){
-	res.render('home');
-});
-
-app.get('/select',function(req,res,next){
 	var context = {};
 	pool.query('SELECT * FROM workouts', function(err, rows, fields){
 		
