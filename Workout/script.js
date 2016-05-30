@@ -31,8 +31,6 @@ app.get('/',function(req,res,next){
 });
 
 app.get('/reset-table',function(req,res,next){
-	var context = {};
-	
 	pool.query("DROP TABLE IF EXISTS workouts", function(err){
 		var createString = "CREATE TABLE workouts("+
 		"id INT PRIMARY KEY AUTO_INCREMENT,"+
@@ -50,7 +48,6 @@ app.get('/reset-table',function(req,res,next){
 });
 
 app.get('/delete',function(req,res,next){
-	var context = {};
 	pool.query("DELETE FROM workouts WHERE id=?", [req.query.id], function(err, result){
 		
 		if (err){
@@ -64,7 +61,6 @@ app.get('/delete',function(req,res,next){
 });
 
 app.get('/insert',function(req,res,next){
-	var context = {};
 	pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `date`, `lbs`) VALUES (?, ?, ?, ?, ?)", 
 		[req.query.name, req.query.reps, req.query.weight, req.query.date, req.query.lbs], 
 		function(err, result){
@@ -74,13 +70,12 @@ app.get('/insert',function(req,res,next){
 			return;
 		}
 		
-		console.log("Inserted id " + result.insertId);
+		console.log(result);
 		res.redirect('/');
 	});
 });
 
 app.get('/update',function(req,res,next){
-	var context = {};
 	pool.query("UPDATE workouts SET name=?, reps=?, weight=? date=?, lbs=? WHERE id=? ",
 		[req.query.name, req.query.reps, req.query.weight, req.query.date, req.query.lbs, req.query.id],
 		function(err, result){
@@ -90,7 +85,7 @@ app.get('/update',function(req,res,next){
 			return;
 		}
 		
-		console.log("Updated " + result.changedRows + " rows.");
+		console.log(result);
 		res.redirect('/');
 	});
 });
