@@ -2,23 +2,60 @@
 
 {{results}}
 
-<table>
-	<tr>
+<form name = "insertTable" action = "/insert" method = "get">
+	<fieldset>
+		<legend> Add Exercise to Workout Table </legend>
+		
+		Name of Exercise:<br>
+		<input type = "text" name = "name" id = "name" required> <br>
+		Number of Reps:<br>
+		<input type = "number" name = "reps" id = "reps"> <br>
+		Amount of Weight:<br>
+		<input type = "number" name = "weight" id = "weight"> <br>
+		Date of Exercise:<br>
+		<input type = "date" name = "date" id = "date"> <br>
+		0 for kgs, 1 for lbs:<br>
+		<input type = "number" name = "lbs" id = "lbs" min = 0 max = 1> <br>
+		
+		<input type = "submit" id = "insertSubmit">
+	</fieldset>
+</form>
+
+<table id = "workoutTable">
+
+	<tr id = "headerRow">
 		<td> Name </td>
 		<td> Reps </td>
 		<td> Weight </td>
 		<td> Date </td>
 		<td> 0-kgs, 1-lbs </td>
 	</tr>
+	
 	{{#each rows}}
-	<tr>
-		<td> {{name}} </td>
-		<td> {{reps}} </td>
-		<td> {{weight}} </td>
-		<td> {{date}} </td>
-		<td> {{lbs}} </td>
+	<tr id = "row"+{{id}}>
+		<td id = "id"+{{id}} style = "display:none"> {{id}} </td>
+		<td id = "name"+{{id}}> 	{{name}} </td>
+		<td id = "reps"+{{id}}> 	{{reps}} </td>
+		<td id = "weight"+{{id}}> 	{{weight}} </td>
+		<td id = "date"+{{id}}> 	{{date}} </td>
+		<td id = "lbs"+{{id}}>		{{lbs}} </td>
+		<td id = "updateButton"+{{id}}> </td>
+		<td id = "deleteButton"+{{id}}> </td>
+		
+		<script>
+			var newButton = document.createElement("button");
+			newButton.textContent = "Update Row";
+			newButton.addEventListener('click', updateRow({{id}}));
+			document.getElementById("updateButton"+{{id}}).appendChild(newButton);
+			
+			var newButton = document.createElement("button");
+			newButton.textContent = "Delete Row";
+			newButton.addEventListener('click', deleteRow({{id}}));
+			document.getElementById("deleteButton"+{{id}}).appendChild(newButton);
+		</script>
 	</tr>
 	{{/each}}
+	
 </table>
 
 <form name = "resetTable" action = "/reset-table" method = "get">
@@ -42,21 +79,15 @@
 	</fieldset>
 </form>
 
-<form name = "insertTable" action = "/insert" method = "get">
-	<fieldset>
-		<legend> Insert Table </legend>
+<script>	
+	function updateRow(id)
+	{
+		console.log("update "+id);
+	}
+	
+	function deleteRow(id)
+	{
+		console.log("delete "+id);
 		
-		Name of Exercise:<br>
-		<input type = "text" name = "name" id = "name" required> <br>
-		Number of Reps:<br>
-		<input type = "number" name = "reps" id = "reps"> <br>
-		Amount of Weight:<br>
-		<input type = "number" name = "weight" id = "weight"> <br>
-		Date of Exercise:<br>
-		<input type = "date" name = "date" id = "date"> <br>
-		0 for kgs, 1 for lbs:<br>
-		<input type = "number" name = "lbs" id = "lbs" min = 0 max = 1> <br>
-		
-		<input type = "submit" id = "insertSubmit">
-	</fieldset>
-</form>
+	}
+</script>
