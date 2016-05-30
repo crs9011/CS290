@@ -45,12 +45,18 @@
 		<script>
 			var newButton = document.createElement("button");
 			newButton.textContent = "Update Row";
-			newButton.addEventListener('click', updateRow({{id}}));
+			newButton.addEventListener('click', function(event)
+			{
+				console.log("update {{id}}");
+			});
 			document.getElementById("updateButton{{id}}").appendChild(newButton);
 			
 			var newButton = document.createElement("button");
 			newButton.textContent = "Delete Row";
-			newButton.addEventListener('click', deleteRow({{id}}));
+			newButton.addEventListener('click', function(event)
+			{
+				console.log("delete {{id}}");
+			});
 			document.getElementById("deleteButton{{id}}").appendChild(newButton);
 			
 			function updateRow(id)
