@@ -4,7 +4,7 @@
 
 <form name = "insertTable" action = "/insert" method = "get">
 	<fieldset>
-		<legend> Add Exercise to Workout Table </legend>
+		<legend> Add Exercise </legend>
 		
 		Name of Exercise:<br>
 		<input type = "text" name = "name" id = "name" required> <br>
@@ -21,68 +21,71 @@
 	</fieldset>
 </form>
 
-<table id = "workoutTable">
+<fieldset>
+	<legend> Workout Table </legend>
+	<table id = "workoutTable">
 
-	<tr id = "headerRow">
-		<td> Name </td>
-		<td> Reps </td>
-		<td> Weight </td>
-		<td> Date </td>
-		<td> 0-kgs, 1-lbs </td>
-	</tr>
-	
-	{{#each rows}}
-	<tr id = "row{{id}}">
-		<td id = "id{{id}}" style = "display:none"> {{id}} </td>
-		<td id = "name{{id}}"> 	{{name}} </td>
-		<td id = "reps{{id}}"> 	{{reps}} </td>
-		<td id = "weight{{id}}"> 	{{weight}} </td>
-		<td id = "date{{id}}"> 	{{date}} </td>
-		<td id = "lbs{{id}}">		{{lbs}} </td>
-		<td id = "updateButton{{id}}"> </td>
-		<td id = "deleteButton{{id}}"> </td>
-		
-		<script>
-			var newButton = document.createElement("button");
-			newButton.textContent = "Update Row";
-			newButton.addEventListener('click', function(event)
-			{
-				console.log("update {{id}}");
-			});
+		<tr id = "headerRow">
+			<td> Name </td>
+			<td> Reps </td>
+			<td> Weight </td>
+			<td> Date </td>
+			<td> 0-kgs, 1-lbs </td>
+		</tr>
 			
-			document.getElementById("updateButton{{id}}").appendChild(newButton);
-			
-			
-			var newButton = document.createElement("button");
-			newButton.textContent = "Delete Row";
-			newButton.addEventListener('click', function(event)
-			{
-				var req = new XMLHttpRequest();
-				var payload = {url:"/delete?{{id}}"};
+		{{#each rows}}
+			<tr id = "row{{id}}">
+				<td id = "id{{id}}" style = "display:none"> {{id}} </td>
+				<td id = "name{{id}}"> 	{{name}} </td>
+				<td id = "reps{{id}}"> 	{{reps}} </td>
+				<td id = "weight{{id}}"> 	{{weight}} </td>
+				<td id = "date{{id}}"> 	{{date}} </td>
+				<td id = "lbs{{id}}">		{{lbs}} </td>
+				<td id = "updateButton{{id}}"> </td>
+				<td id = "deleteButton{{id}}"> </td>
 				
-				req.open("GET", payload.url, false);
-				req.addEventListener('load',function()
-				{
-					if(req.status >= 200 && req.status < 400)
+				<script>
+					var newButton = document.createElement("button");
+					newButton.textContent = "Update Row";
+					newButton.addEventListener('click', function(event)
 					{
-						window.location = "/select";
-					} 
+						console.log("update {{id}}");
+					});
 					
-					else 
+					document.getElementById("updateButton{{id}}").appendChild(newButton);
+					
+					
+					var newButton = document.createElement("button");
+					newButton.textContent = "Delete Row";
+					newButton.addEventListener('click', function(event)
 					{
-						console.log("Error in network request: " + request.statusText);
-					}
-				});
-				
-				req.send(null);		
-			});
-			
-			document.getElementById("deleteButton{{id}}").appendChild(newButton);
-		</script>
-	</tr>
-	{{/each}}
-	
-</table>
+						var req = new XMLHttpRequest();
+						var payload = {url:NULL};
+						payload.url = "/delete?id={{id}}";
+						
+						req.open("GET", payload.url, false);
+						req.addEventListener('load',function()
+						{
+							if(req.status >= 200 && req.status < 400)
+							{
+								window.location = "/";
+							} 
+							
+							else 
+							{
+								console.log("Error in network request: " + request.statusText);
+							}
+						});
+						
+						req.send(null);		
+					});
+					
+					document.getElementById("deleteButton{{id}}").appendChild(newButton);
+				</script>
+			</tr>
+		{{/each}}
+	</table>
+</fieldset>
 
 <form name = "resetTable" action = "/reset-table" method = "get">
 	<fieldset>
