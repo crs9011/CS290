@@ -2,6 +2,13 @@
 
 {{results}}
 
+<form name = "resetTable" action = "/reset-table" method = "get">
+	<fieldset>
+		<legend> Reset Table </legend>
+		<input type = "submit" id = "resetSubmit">
+	</fieldset>
+</form>
+
 <form name = "insertTable" action = "/insert" method = "get">
 	<fieldset>
 		<legend> Add Exercise </legend>
@@ -62,19 +69,6 @@
 				</td>
 			</tr>
 		{{/each}}
+		
 	</table>
 </fieldset>
-
-<form name = "resetTable" action = "/reset-table" method = "get">
-	<fieldset>
-		<legend> Reset Table </legend>
-		<input type = "submit" id = "resetSubmit">
-	</fieldset>
-</form>
-
-<form name = "submitTable" action = "/" method = "get">
-	<fieldset>
-		<legend> Reload Table </legend>
-		<input type = "submit" id = "selectSubmit">
-	</fieldset>
-</form>

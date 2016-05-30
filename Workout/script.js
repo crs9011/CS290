@@ -76,7 +76,7 @@ app.get('/insert',function(req,res,next){
 });
 
 app.get('/update',function(req,res,next){
-	pool.query("UPDATE workouts SET name=?, reps=?, weight=? date=?, lbs=? WHERE id=? ",
+	pool.query("UPDATE workouts SET name=?, reps=?, weight=? date=?, lbs=? WHERE id=?",
 		[req.query.name, req.query.reps, req.query.weight, req.query.date, req.query.lbs, req.query.id],
 		function(err, result){
 			
