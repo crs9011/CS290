@@ -31,6 +31,8 @@
 			<td> Weight </td>
 			<td> Date </td>
 			<td> 0-kgs, 1-lbs </td>
+			<td> Delete Row </td>
+			<td> Update Row </td>
 		</tr>
 			
 		{{#each rows}}
@@ -44,7 +46,7 @@
 				<td id = "deleteButton{{id}}"> 
 					<form name = "deleteTable{{id}}" action = "/delete" method = "get">
 						<input type = "number" name = "id" id = "id" style = "display:none" value = "{{id}}">
-						<input type = "submit" id = "deleteSubmit"> Delete Row </input>
+						<input type = "submit" id = "deleteSubmit" value = "Delete Row">
 					</form>
 				</td>
 				<td id = "updateButton{{id}}"> 
@@ -55,7 +57,7 @@
 						<input type = "date" name = "date" id = "date" value = "{{date}}">
 						<input type = "number" name = "lbs" id = "lbs" min = 0 max = 1 value = "{{lbs}}">
 						<input type = "number" name = "id" id = "id" style = "display:none" value = "{{id}}">
-						<input type = "submit" id = "updateSubmit"> Update Row </input>
+						<input type = "submit" id = "updateSubmit" value = "Update Row">
 					</form>
 				</td>
 			</tr>
