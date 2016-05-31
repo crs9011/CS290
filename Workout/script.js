@@ -81,25 +81,25 @@ app.get('/update',function(req,res,next){
 			next(err);
 			return;
 		}
+	
+		if (result.length == 1){
+			var currentVals = result[0];
+			pool.query("UPDATE workouts SET name=?, reps=?, weight=?, date=?, lbs=? WHERE id=? ",
+				[req.query.name || currentVals.name, req.query.reps || currentVals.reps,
+				 req.query.weight || currentVals.weight, req.query.date || currentVals.date,
+				 req.query.lbs || currentVals.lbs, req.query.id],
+				function(err, result){
+					
+				if(err){
+					next(err);
+					return;
+				}
+		
+				console.log(result);
+				res.redirect('/');
+			});
+		}
 	});
-	
-	if (result.length == 1){
-		var currentVals = result[0];
-		pool.query("UPDATE workouts SET name=?, reps=?, weight=?, date=?, lbs=? WHERE id=? ",
-			[req.query.name || currentVals.name, req.query.reps || currentVals.reps,
- 			 req.query.weight || currentVals.weight, req.query.date || currentVals.date,
-			 req.query.lbs || currentVals.lbs, req.query.id],
-			function(err, result){
-				
-			if(err){
-				next(err);
-				return;
-			}
-	
-			console.log(result);
-			res.redirect('/');
-		});
-	}
 });
 
 
